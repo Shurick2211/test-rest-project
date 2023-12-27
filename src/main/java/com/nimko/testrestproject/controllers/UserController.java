@@ -6,9 +6,10 @@ import com.nimko.testrestproject.services.PersonService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,29 +27,22 @@ import org.springframework.web.bind.annotation.RestController;
             url = "https://github.com/Shurick2211")
     )
 )
+@RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final PersonService personService;
-
-    @Autowired
-    public UserController(PersonService personService) {
-        this.personService = personService;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/add")
     public ResponseEntity<?> addBody(@RequestBody UserDto user){
-        if (user != null) {
-            personService.addPerson(user);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        return ResponseEntity.badRequest().build();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return personService.addPerson(user);
     }
 
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authPerson(@RequestBody UserDto user){
-        return user != null ? ResponseEntity.status(HttpStatus.ACCEPTED).body(personService.authPerson(user)):
-                ResponseEntity.badRequest().build();
+        return   personService.authPerson(user, passwordEncoder);
     }
-
 }

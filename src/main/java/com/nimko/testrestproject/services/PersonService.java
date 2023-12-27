@@ -1,34 +1,49 @@
 package com.nimko.testrestproject.services;
 
 
+import com.nimko.testrestproject.dto.JwtResponse;
 import com.nimko.testrestproject.dto.UserDto;
+import com.nimko.testrestproject.models.Person;
 import com.nimko.testrestproject.repo.PersonRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nimko.testrestproject.utils.JwtTokenUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PersonService implements UserDetailsService {
 
     private final PersonRepo repo;
+    private final JwtTokenUtils jwtTokenUtils;
 
-    @Autowired
-    public PersonService(PersonRepo repo) {
-        this.repo = repo;
+    public ResponseEntity<?> addPerson(UserDto user){
+        Person person = repo.findFirstByUsername(user.getUsername()).orElse(null);
+        if (person == null) {
+            repo.save(user.toEntity());
+        }
+        else return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public void addPerson(UserDto user){
-        repo.save(user.toEntity());
-    }
-
-    public String authPerson(UserDto user){
-        return "";
+    public ResponseEntity<?> authPerson(UserDto user, PasswordEncoder passwordEncoder) {
+        Person person = repo.findFirstByUsername(user.getUsername()).orElse(null);
+        return person != null && passwordEncoder.matches(user.getPassword(), person.getPassword()) ?
+            ResponseEntity.ok(new JwtResponse(jwtTokenUtils.generateToken(person))):
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repo.findFirstByUsername(username).orElse(null);
+        return repo.findFirstByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+            String.format("User with name - %s - not found!", username)
+        ));
     }
+
+
 }
