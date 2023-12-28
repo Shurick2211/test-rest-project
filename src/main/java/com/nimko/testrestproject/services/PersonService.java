@@ -31,11 +31,8 @@ public class PersonService implements UserDetailsService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<?> authPerson(UserDto user, PasswordEncoder passwordEncoder) {
-        Person person = repo.findFirstByUsername(user.getUsername()).orElse(null);
-        return person != null && passwordEncoder.matches(user.getPassword(), person.getPassword()) ?
-            ResponseEntity.ok(new JwtResponse(jwtTokenUtils.generateToken(person))):
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<?> authPerson(UserDto user) {
+        return ResponseEntity.ok(new JwtResponse(jwtTokenUtils.generateToken(user.toEntity())));
     }
 
     @Override
