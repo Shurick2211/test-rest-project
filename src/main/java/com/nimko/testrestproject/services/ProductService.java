@@ -18,8 +18,10 @@ public class ProductService {
 
 
     public void addProducts(TableProductsDto dto){
-        if (dto.getTable().equals(TABLE_NAME))
+        if (dto.getTable().equals(TABLE_NAME)) {
             dto.getRecords().forEach(product -> repo.save(product.toEntity()));
+            log.info("Saved products!");
+        }
     }
 
     public TableProductsDto getAllProducts(){

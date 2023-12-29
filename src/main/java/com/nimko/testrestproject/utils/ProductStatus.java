@@ -1,5 +1,8 @@
 package com.nimko.testrestproject.utils;
 
+import lombok.Getter;
+
+@Getter
 public enum ProductStatus {
     PAID("Paid"),
     UNPAID("Unpaid");
@@ -9,7 +12,4 @@ public enum ProductStatus {
         this.status = status;
     }
 
-    public String getStatus() {
-        return status;
-    }
 }
