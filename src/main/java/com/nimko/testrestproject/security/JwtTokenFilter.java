@@ -23,15 +23,15 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-      FilterChain filterChain) throws ServletException, IOException {
+                                  FilterChain filterChain) throws ServletException, IOException {
     String authHeader = request.getHeader("Authorization");
-    log.info(authHeader);
     String username = null;
     String jwt;
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       jwt = authHeader.substring(7);
       try{
         username = utils.getUserName(jwt);
+        log.info(username);
       } catch (ExpiredJwtException e) {
         log.debug("Token lifetime period is out!");
       } catch (SignatureException e) {
@@ -40,7 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
     }
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
       var token = new UsernamePasswordAuthenticationToken(
-          username,null);
+          username,null, null);
       SecurityContextHolder.getContext().setAuthentication(token);
     }
     filterChain.doFilter(request,response);

@@ -4,14 +4,15 @@ import com.nimko.testrestproject.dto.TableProductsDto;
 import com.nimko.testrestproject.models.Product;
 import com.nimko.testrestproject.repo.ProductRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
-    public final static String TABLE_NAME = "products";
+    private final static String TABLE_NAME = "products";
     private final ProductRepo repo;
 
 

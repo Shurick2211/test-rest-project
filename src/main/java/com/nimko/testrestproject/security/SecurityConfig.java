@@ -1,9 +1,13 @@
 package com.nimko.testrestproject.security;
 
 import com.nimko.testrestproject.services.PersonService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -24,7 +28,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(securedEnabled = true)
-@SecurityScheme(name = "Token", scheme = "bearer" ,type = SecuritySchemeType.HTTP, bearerFormat = "JWT")
+@OpenAPIDefinition(security = {@SecurityRequirement(name = "bearer-key")})
+@SecurityScheme(name = "bearer-key", scheme = "bearer" ,type = SecuritySchemeType.HTTP, bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
 public class SecurityConfig {
 
     private final PersonService personService;
