@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 @OpenAPIDefinition(info =
     @Info(
-        title =  "...",
+        title =  "${api.name}",
         version = "${api.ver}",
-        description = "API for Victorina-bot",
+        description = "${api.description}",
         contact = @Contact(name = "Olexandr Nimko",
             email = "shurick2211@gmail.com",
-            url = "https://github.com/Shurick2211")
+            url = "https://github.com/Shurick2211/test-rest-project.git")
     )
 )
 @RequiredArgsConstructor

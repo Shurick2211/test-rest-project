@@ -1,8 +1,10 @@
 package com.nimko.testrestproject.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nimko.testrestproject.models.Product;
 import com.nimko.testrestproject.utils.LocalDateDeserializer;
+import com.nimko.testrestproject.utils.LocalDateSerializer;
 import com.nimko.testrestproject.utils.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ProductDto {
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate entryDate;
     private int itemCode;
     private String itemName;
