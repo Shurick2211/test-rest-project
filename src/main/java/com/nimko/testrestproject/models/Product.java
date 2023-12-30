@@ -1,7 +1,6 @@
 package com.nimko.testrestproject.models;
 
 import com.nimko.testrestproject.dto.ProductDto;
-import com.nimko.testrestproject.utils.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +23,9 @@ public class Product {
     private int itemCode;
     private String itemName;
     private int itemQuantity;
-    private ProductStatus status;
+    private String status;
 
     public ProductDto toDto(){
-        return new ProductDto(entryDate,itemCode,itemName,itemQuantity,status.getStatus());
+        return new ProductDto(entryDate,itemCode,itemName,itemQuantity,status);
     }
 }

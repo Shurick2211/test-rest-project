@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nimko.testrestproject.models.Product;
 import com.nimko.testrestproject.utils.LocalDateDeserializer;
 import com.nimko.testrestproject.utils.LocalDateSerializer;
-import com.nimko.testrestproject.utils.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -31,7 +29,7 @@ public class ProductDto {
         entity.setItemCode(itemCode);
         entity.setItemName(itemName);
         entity.setItemQuantity(itemQuantity);
-        entity.setStatus(ProductStatus.valueOf(status.toUpperCase()));
+        entity.setStatus(status);
         return entity;
     }
 }
